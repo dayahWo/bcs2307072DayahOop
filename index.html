@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherWise</title>
+    <!-- Google Font for a Catchy Look -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: url('bg1.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            position: relative; /* Keep relative positioning for the overlay */
+            padding-bottom: 100px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed; /* Use fixed position so it covers the entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity for desired darkness */
+            z-index: -1; /* Ensure the overlay is behind all other content */
+        }
+
+        /* Navbar Styling */
+        nav {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            margin-bottom: 50px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+            color: #005580;
+        }
+
+        .welcome {
+            text-align: center;
+            color: #333;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.85); /* Lighter background for readability */
+            border-radius: 12px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .welcome h2 {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #005580; /* Calmer blue color for the title */
+            text-shadow: none; /* Removed text shadow for a cleaner look */
+            margin-bottom: 15px;
+        }
+
+        .welcome p {
+            font-size: 1.2em;
+            color: #333; /* Darker text for contrast against the light background */
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Activity Header Styling */
+        h1 {
+            font-size: 2em;
+            color: #b8e5fc;
+            text-align: center;
+            font-weight: 700;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-shadow: none;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-grid a {
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            transition: transform 0.3s ease;
+            font-weight: 600;
+        }
+
+        .activity-grid a:hover {
+            transform: scale(1.05);
+        }
+
+        .activity-grid img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .activity-grid span {
+            font-size: 1.1em;
+            color: #005580;
+            font-weight: bold;
+        }
+
+        .search-container {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .search-container input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            width: 70%;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #005580;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .weather-results {
+            margin-top: 20px;
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 20px auto;
+            display: none; /* Hidden initially */
+        }
+
+        .location-info {
+            margin-bottom: 20px;
+            color: #005580;
+        }
+
+        .forecast-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .forecast {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .forecast img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .forecast h4 {
+            color: #005580;
+            margin-top: 10px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #221919;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="crud.html">Manage Notes</a></li>
+        </ul>
+    </nav>
+
+    <section class="welcome">
+        <h2>Welcome to SkyQuest</h2>
+        <p>Your ultimate guide to planning the perfect adventure, rain or shine! 🌞⛅❄️ Explore activities tailored and <b>When you click on the image</b>, several recommended locations for the selected activity will appear. You can also check the weather forecast for these places, ensuring your outdoor experience is well-prepared and unforgettable</p>
+    </section>
+
+    <div class="search-container">
+        <h2>Search for Weather</h2>
+        <input type="text" id="locationInput" placeholder="Enter location...">
+        <button onclick="fetchWeather()">Check Weather</button>
+    </div>
+
+    <!-- Weather Results -->
+    <div id="weatherResults" class="weather-results">
+        <div id="locationInfo" class="location-info"></div>
+        <div id="forecastRow" class="forecast-row"></div>
+    </div>
+    
+    <h1>Choose Your Adventure</h1>
+    
+    <!-- Activity Grid -->
+    <div class="activity-grid">
+        <a href="details.html?activity=Hiking"><img src="hiking.jpeg" alt="Hiking"><span>Hiking</span></a>
+        <a href="details.html?activity=Camping"><img src="camping.jpeg" alt="Camping"><span>Camping</span></a>
+        <a href="details.html?activity=Mountain Biking"><img src="Mountain Biking.jpeg" alt="Mountain Biking"><span>Mountain Biking</span></a>
+        <a href="details.html?activity=Rock Climbing"><img src="Rock Climbing.jpeg" alt="Rock Climbing"><span>Rock Climbing</span></a>
+        <a href="details.html?activity=Kayaking"><img src="kayaking.jpeg" alt="Kayaking"><span>Kayaking</span></a>
+        <a href="details.html?activity=Bungee Jumping"><img src="bungee jumping.jpeg" alt="Bungee Jumping"><span>Bungee Jumping</span></a>
+        <a href="details.html?activity=Snowboarding"><img src="snowboarding.jpeg" alt="Snowboarding"><span>Snowboarding</span></a>
+        <a href="details.html?activity=Beach Volleyball"><img src="beach volleyball.jpeg" alt="Beach Volleyball"><span>Beach Volleyball</span></a>
+        <a href="details.html?activity=Trail Running"><img src="trail running.jpeg" alt="Trail Running"><span>Trail Running</span></a>
+        <a href="details.html?activity=Ziplining"><img src="ziplining.jpeg" alt="Ziplining"><span>Ziplining</span></a>
+        <a href="details.html?activity=Archery"><img src="Archery.jpeg" alt="Archery"><span>Archery</span></a>
+        <a href="details.html?activity=Paragliding"><img src="paragliding.jpeg" alt="Paragliding"><span>Paragliding</span></a>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SkyQuest | Your guide to the perfect outdoor adventure, rain or shine.</p>
+    </footer>
+
+    <script>
+        async function fetchWeather() {
+            const location = document.getElementById('locationInput').value;
+            const apiKey = 'd9d76984221d429d9c204822241410';
+            const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=3`;
+    
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Location not found');
+                }
+                const data = await response.json();
+    
+                // Display location and weather information
+                displayWeather(data);
+            } catch (error) {
+                alert("Could not retrieve weather data. Please try again.");
+            }
+        }
+    
+        function displayWeather(data) {
+            const locationInfo = document.getElementById('locationInfo');
+            const forecastRow = document.getElementById('forecastRow');
+            const weatherResults = document.getElementById('weatherResults');
+            
+            // Display location details and current "Feels-Like" temperature
+            locationInfo.innerHTML = `
+                <h4>${data.location.name}, ${data.location.region}, ${data.location.country}</h4><br>
+                <p>Local Time: ${data.location.localtime}</p>
+                <p>Feels-Like: ${data.current.feelslike_c}°C</p>
+            `;
+    
+            // Clear previous forecast data
+            forecastRow.innerHTML = '';
+    
+            // Display forecast for each day in a row
+            data.forecast.forecastday.forEach(day => {
+                const date = new Date(day.date).toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+    
+                const iconUrl = `https:${day.day.condition.icon}`; // Ensure icon URL is fully qualified
+                const forecastHTML = `
+                    <div class="forecast">
+                        <h4>${date}</h4>
+                        <img src="${iconUrl}" alt="${day.day.condition.text}">
+                        <p>Temperature: ${day.day.avgtemp_c}°C</p>
+                        <p>UV Index: ${day.day.uv}</p>
+                        <p>Wind Speed: ${day.day.maxwind_kph} kph</p>
+                        <p>Humidity: ${day.day.avghumidity}%</p>
+                        <p>Condition: ${day.day.condition.text}</p>
+                        <p>Chance of Rain: ${day.day.daily_chance_of_rain}%</p>
+                        <p>Chance of Snow: ${day.day.daily_chance_of_snow}%</p>
+                    </div>
+                `;
+                forecastRow.innerHTML += forecastHTML;
+            });
+    
+            weatherResults.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

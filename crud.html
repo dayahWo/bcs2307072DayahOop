@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('bg2.jpeg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Dark overlay for entire page */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1; /* Lower z-index so nav and content are above */
+        }
+
+        nav {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            margin-bottom: 50px;
+            z-index: 3; /* Higher z-index to stay above the overlay */
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+            color: #005580;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+            position: relative; /* To keep the z-index of the container above the overlay */
+            z-index: 2;
+        }
+
+
+        /* Heading styles */
+        h1 {
+            text-align: center;
+            color: #5A5A5A;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Form group styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Input and textarea styles */
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #8CA0D7; /* Softer color on focus */
+            outline: none;
+        }
+
+        /* Button styles */
+        .btn {
+            background-color: #8CA0D7;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 2px;
+        }
+
+        .btn:hover {
+            background-color: #6576B4; /* Darker shade on hover */
+        }
+
+        /* Notes list styles */
+        .notes-list {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 20px; /* Space between notes */
+        }
+
+        .note-item {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%; /* Full width */
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #5A5A5A;
+        }
+
+        .note-item:hover {
+            transform: scale(1.03); /* Slightly enlarge on hover */
+            background-color: #e9e9f6;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .note-item {
+                flex: 1 1 calc(50% - 20px); /* Two items in a row on smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .note-item {
+                flex: 1 1 100%; /* One item in a row on very small screens */
+            }
+        }
+
+        /* Homepage link style */
+        a.homepage-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #A3BFFA;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 3;
+        }
+
+        a.homepage-link:hover {
+            color: #7B8CC7;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #221919;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Back to Homepage</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>Note Management</h1>
+        <form id="noteForm">
+            <div class="form-group">
+                <label for="noteTitle">Note Title</label>
+                <input id="noteTitle" type="text" class="form-control" required> 
+            </div>
+            <div class="form-group">
+                <label for="noteContent">Note Content</label>
+                <textarea id="noteContent" class="form-control" rows="5" required></textarea>
+            </div> 
+            <button id="btnCreate" class="btn btn-default" type="submit">Create Note</button>
+        </form>
+        <div id="notesList" class="notes-list"></div>
+    </div>
+    <script src="crud.js"></script><br><br><br><br>
+    <footer>
+        <p>&copy; 2024 SkyQuest | Your guide to the perfect outdoor adventure, rain or shine.</p>
+    </footer>
+    
+</body>
+</html>
